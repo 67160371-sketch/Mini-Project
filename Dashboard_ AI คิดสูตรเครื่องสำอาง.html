@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard: AI ช่วยพัฒนาสูตรเครื่องสำอาง</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#fbf3f1;--card:#fff;--ink:#2a1f2d;--mute:#7a6a7d;--rose:#d4476b;--lav:#8d7bd8;--sage:#4f9a80;--line:#ead9d9}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1520;--card:#2a2030;--ink:#f7eaee;--mute:#b6a5ba;--rose:#f0719a;--lav:#a897f0;--sage:#6fc1a4;--line:#403349}}
+:root[data-theme="dark"]{--bg:#1d1520;--card:#2a2030;--ink:#f7eaee;--mute:#b6a5ba;--rose:#f0719a;--lav:#a897f0;--sage:#6fc1a4;--line:#403349}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Prompt",system-ui,sans-serif;line-height:1.6}
+.wrap{max-width:980px;margin:0 auto;padding:20px 16px 48px}
+header h1{font-size:clamp(1.5rem,4.5vw,2.4rem);line-height:1.25;margin:4px 0 4px;font-weight:700}
+header p{margin:0;color:var(--mute);font-size:.92rem}
+nav{display:flex;gap:6px;overflow-x:auto;margin:18px 0 14px;padding-bottom:4px}
+nav button{flex:1 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 12px;border-radius:999px;font:inherit;font-size:.85rem;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--rose);border-color:var(--rose);color:#fff;font-weight:600}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:18px}
+.bar i{display:block;height:100%;width:20%;background:var(--lav);transition:width .3s}
+section{display:none}section.on{display:block}
+h2{font-size:clamp(1.2rem,3.4vw,1.7rem);margin:0 0 6px;line-height:1.35}
+.lead{color:var(--mute);margin:0 0 16px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h3{margin:0 0 10px;font-size:.95rem}
+.kpi b{display:block;font-size:2.1rem;line-height:1.1;color:var(--rose)}
+.kpi span{color:var(--mute);font-size:.85rem}
+.row{display:grid;grid-template-columns:110px 1fr 56px;gap:8px;align-items:center;margin:9px 0;font-size:.85rem}
+.track{height:16px;background:var(--line);border-radius:8px;overflow:hidden}
+.track i{display:block;height:100%;border-radius:8px;width:0;transition:width .7s}
+.row em{font-style:normal;text-align:right;font-weight:600}
+svg{width:100%;height:auto;display:block}
+svg text{fill:var(--mute);font-size:11px;font-family:inherit}
+.leg{display:flex;flex-wrap:wrap;gap:10px;font-size:.78rem;margin-top:6px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);margin-right:5px}
+.ctrl{display:flex;justify-content:space-between;margin-top:20px;gap:10px}
+.ctrl button{border:0;background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:10px;font:inherit;cursor:pointer}
+.ctrl button:disabled{opacity:.3;cursor:default}
+details{margin-top:28px;font-size:.82rem}
+summary{cursor:pointer;font-weight:600}
+table{width:100%;border-collapse:collapse;margin-top:8px;display:block;overflow-x:auto}
+td,th{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left;white-space:nowrap}
+footer{margin-top:24px;color:var(--mute);font-size:.78rem}
+button:focus-visible{outline:3px solid var(--lav);outline-offset:2px}
+@media (max-width:520px){.row{grid-template-columns:84px 1fr 48px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>AI ช่วยพัฒนาสูตรเครื่องสำอาง</h1>
+<p>67160371 นาย วิศรุต พุกพะยา</p>
+</header>
+<nav id="nav" role="tablist"></nav>
+<div class="bar"><i id="prog"></i></div>
+
+<section>
+<h2>ปัญหา: หนึ่งสูตรใช้เวลาหลายเดือน</h2>
+<p class="lead">โรงงานและแบรนด์เครื่องสำอางต้องลองผิดลองถูกในห้องแล็บซ้ำหลายรอบกว่าจะได้สูตรที่ใช่</p>
+<div class="grid">
+<div class="card kpi"><b>24 สัปดาห์</b><span>เวลาพัฒนา 1 สูตรแบบเดิม</span></div>
+<div class="card kpi"><b>8–12 รอบ</b><span>จำนวนการทดลองเฉลี่ยต่อสูตร</span></div>
+<div class="card kpi"><b>ช้ากว่าเทรนด์</b><span>สินค้าออกตลาดหลังกระแสผ่านไปแล้ว</span></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>เวลาพัฒนาต่อ 1 สูตร (สัปดาห์)</h3><div id="c-time"></div></div>
+</section>
+
+<section>
+<h2>โอกาส: ผู้บริโภคเปลี่ยนความนิยมส่วนผสมเร็วมาก</h2>
+<p class="lead">ใครจับเทรนด์ส่วนผสมได้ก่อน ก็ขายได้ก่อน</p>
+<div class="card"><h3>ดัชนีความนิยมส่วนผสม (ปี 2022–2026)</h3><div id="c-trend"></div><div class="leg" id="leg"></div></div>
+</section>
+
+<section>
+<h2>ทางออก: AI วิเคราะห์สูตรให้ก่อนเข้าแล็บ</h2>
+<p class="lead">AI อ่านฐานข้อมูลวัตถุดิบ + เทรนด์ตลาด แล้วเสนอสูตรที่มีโอกาสสำเร็จสูง</p>
+<div class="grid">
+<div class="card kpi"><b>-83%</b><span>เวลาพัฒนา (24 → 4 สัปดาห์)</span></div>
+<div class="card kpi"><b>-60%</b><span>ต้นทุนวิจัยและพัฒนา</span></div>
+<div class="card kpi"><b>3 รอบ</b><span>ทดลองจริงในแล็บ (เดิม 8–12)</span></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>ต้นทุน R&amp;D ต่อสูตร เทียบกับแบบเดิม (100%)</h3><div id="c-cost"></div></div>
+</section>
+
+<section>
+<h2>ลูกค้าและรายได้: ใครจ่าย และจ่ายอย่างไร</h2>
+<p class="lead">เริ่มจากโรงงาน OEM/ODM ซึ่งเป็นกลุ่มที่เจ็บปวดกับเรื่องเวลามากที่สุด</p>
+<div class="grid">
+<div class="card"><h3>กลุ่มลูกค้า (% ของลูกค้า)</h3><div id="c-seg"></div></div>
+<div class="card"><h3>แหล่งรายได้ (% ของรายได้)</h3><div id="c-rev"></div></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>รายได้คาดการณ์ (ล้านบาท)</h3><div id="c-year"></div></div>
+</section>
+
+<section>
+<h2>สรุป: เร็วขึ้น ถูกลง จับเทรนด์ได้ทัน</h2>
+<p class="lead">Business Model: แพลตฟอร์ม AI สำหรับวิเคราะห์สูตรเครื่องสำอาง</p>
+<div class="grid">
+<div class="card"><h3>ปัญหา</h3>พัฒนาสูตรช้า ต้นทุนสูง</div>
+<div class="card"><h3>ทางออก</h3>AI แนะนำสูตรจากฐานข้อมูลวัตถุดิบและเทรนด์</div>
+<div class="card"><h3>ผลลัพธ์</h3>ลดเวลา 83% ลดต้นทุน 60%</div>
+<div class="card"><h3>รายได้</h3>สมาชิก + ค่าวิเคราะห์ + ที่ปรึกษา + ระบบ AI องค์กร</div>
+</div>
+</section>
+
+<div class="ctrl"><button id="prev">ย้อนกลับ</button><button id="next">ถัดไป</button></div>
+
+<details>
+<summary>ข้อมูลที่ใช้ (Data)</summary>
+<table id="tbl"></table>
+</details>
+<footer>หมายเหตุ: ตัวเลขทั้งหมดเป็นข้อมูลตัวอย่างสมมติเพื่อการนำเสนอในรายวิชา ไม่ใช่สถิติจริงจากตลาด</footer>
+</div>
+<script>
+var D={
+time:[["วิธีเดิม",24],["ใช้ AI",4]],
+cost:[["วิธีเดิม",100],["ใช้ AI",40]],
+seg:[["โรงงาน OEM/ODM",40],["แบรนด์เครื่องสำอาง",30],["Startup",20],["นักวิจัย",10]],
+rev:[["ค่าสมาชิก",35],["ค่าวิเคราะห์สูตร",30],["ระบบ AI องค์กร",20],["ค่าที่ปรึกษา",15]],
+years:["2022","2023","2024","2025","2026"],
+trend:{"Niacinamide":[50,58,66,72,76],"Centella":[30,42,58,72,85],"Retinol":[45,52,55,58,60],"Peptide":[20,30,45,62,80]},
+year:[["ปีที่ 1",1.2],["ปีที่ 2",3.5],["ปีที่ 3",7.8]]
+};
+var COL=["#d4476b","#8d7bd8","#4f9a80","#e0a030"];
+function bars(id,arr,unit,max){
+ var el=document.getElementById(id),m=max||Math.max.apply(null,arr.map(function(a){return a[1]}));
+ el.innerHTML=arr.map(function(a,i){return '<div class="row"><span>'+a[0]+'</span><div class="track"><i data-w="'+(a[1]/m*100)+'" style="background:'+COL[i%4]+'"></i></div><em>'+a[1]+unit+'</em></div>'}).join("");
+}
+bars("c-time",D.time," สัป.");bars("c-cost",D.cost,"%",100);bars("c-seg",D.seg,"%",50);bars("c-rev",D.rev,"%",50);bars("c-year",D.year," ล.");
+// line chart
+(function(){
+ var W=600,H=240,p=34,keys=Object.keys(D.trend),s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="กราฟเส้นความนิยมส่วนผสม">';
+ for(var g=0;g<=4;g++){var y=H-p-g*(H-2*p)/4;s+='<line x1="'+p+'" x2="'+(W-10)+'" y1="'+y+'" y2="'+y+'" stroke="var(--line)"/><text x="4" y="'+(y+4)+'">'+(g*25)+'</text>'}
+ D.years.forEach(function(t,i){s+='<text x="'+(p+i*(W-p-20)/4)+'" y="'+(H-10)+'" text-anchor="middle">'+t+'</text>'});
+ keys.forEach(function(k,j){var pts=D.trend[k].map(function(v,i){return (p+i*(W-p-20)/4)+","+(H-p-v/100*(H-2*p))}).join(" ");
+  s+='<polyline points="'+pts+'" fill="none" stroke="'+COL[j]+'" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'});
+ document.getElementById("c-trend").innerHTML=s+'</svg>';
+ document.getElementById("leg").innerHTML=keys.map(function(k,j){return '<span style="--c:'+COL[j]+'">'+k+'</span>'}).join("");
+})();
+// data table
+(function(){
+ var h='<tr><th>ชุดข้อมูล</th><th>รายการ</th><th>ค่า</th></tr>';
+ function add(n,a,u){a.forEach(function(r){h+='<tr><td>'+n+'</td><td>'+r[0]+'</td><td>'+r[1]+u+'</td></tr>'})}
+ add("เวลาพัฒนา",D.time," สัปดาห์");add("ต้นทุน R&D",D.cost,"%");add("กลุ่มลูกค้า",D.seg,"%");add("แหล่งรายได้",D.rev,"%");add("รายได้คาดการณ์",D.year," ล้านบาท");
+ Object.keys(D.trend).forEach(function(k){h+='<tr><td>ดัชนีนิยม '+k+'</td><td>2022–2026</td><td>'+D.trend[k].join(", ")+'</td></tr>'});
+ document.getElementById("tbl").innerHTML=h;
+})();
+// scenes
+var names=[["ปัญหา","0:00"],["โอกาส","0:35"],["ทางออก","1:10"],["รายได้","1:50"],["สรุป","2:30"]];
+var secs=document.querySelectorAll("section"),nav=document.getElementById("nav"),cur=0;
+names.forEach(function(n,i){var b=document.createElement("button");b.setAttribute("role","tab");b.textContent=n[0];b.onclick=function(){go(i)};nav.appendChild(b)});
+function go(i){
+ cur=Math.max(0,Math.min(4,i));
+ secs.forEach(function(s,k){s.classList.toggle("on",k===cur)});
+ Array.prototype.forEach.call(nav.children,function(b,k){b.setAttribute("aria-selected",k===cur)});
+ document.getElementById("prog").style.width=((cur+1)*20)+"%";
+ document.getElementById("prev").disabled=cur===0;document.getElementById("next").disabled=cur===4;
+ setTimeout(function(){secs[cur].querySelectorAll(".track i").forEach(function(e){e.style.width=e.dataset.w+"%"})},50);
+}
+document.getElementById("prev").onclick=function(){go(cur-1)};
+document.getElementById("next").onclick=function(){go(cur+1)};
+document.addEventListener("keydown",function(e){if(e.key==="ArrowRight")go(cur+1);if(e.key==="ArrowLeft")go(cur-1)});
+go(0);
+</script>
+</body>
+</html>
